@@ -16,12 +16,12 @@ async def get_centre_names():
 @app.get("/crop_names")
 async def get_crop_names():
     frames = extract_crop_names()
-    return {"message":"Attached crops are available", "data":list(frames.keys())}
+    return {"message":"Attached crops are available", "data":frames}
 
-@app.get("/crop_prices")
+@app.post("/crop_prices")
 async def get_all_crops(filters:Filter=None):
-    frames = get_all_data(until=db['date'],filters=filters)
-    return {"message":"Historic data", "data":frames}
+    df = get_data(until=db['date'],filters=filters)
+    return {"message":"Historic data", "data":df}
 
 @app.get('/')
 async def docs():
