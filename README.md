@@ -23,6 +23,10 @@ fastapi dev .\proxy.py
 ```
 fastapi dev .\proxy.py
 ```
+or in case fastapi is not in PATH for some reason
+```
+python -m fastapi dev .\proxy.py
+```
 
 ## Accessing the docs:
 ```
