@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
+from fastapi.responses import RedirectResponse
 from models import *
 from data_handler import *
 from unqlite import UnQLite as unq
@@ -26,6 +27,10 @@ async def get_crop_names():
 async def get_all_crops():
     frames = get_all_data(until=db['date'])
     return {"message":"Historic data", "data":frames}
+
+@app.get('/')
+async def docs():
+    return RedirectResponse(app.docs_url, status_code=status.HTTP_303_SEE_OTHER)
 
 @app.post("/set_date")
 async def set_date(date: DateModel):
