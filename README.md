@@ -8,14 +8,14 @@
 ```shell
 python -m venv kisaan
 .\kisaan\Scripts\Activate.ps1
-pip install -r requirement.txt
+pip install -r requirements.txt
 fastapi dev .\proxy.py
 ```
 ### For linux:
 ```bash
 python -m venv kisaan
 source kisaan/bin/activate
-pip install -r requirement.txt
+pip install -r requirements.txt
 fastapi dev .\proxy.py
 ```
 
