@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import pathlib
 from datetime import datetime
+from models import *
 
 def get_data_frame(path:str, until:datetime=None):
     df = pd.read_csv(path)
@@ -32,11 +33,15 @@ def get_crop_data(crop:str,until:datetime=None):
         dataframes[crop_name] = file
     
     if crop in dataframes:
-        return {crop:get_data_frame(dataframes[crop],until).to_dict()}
+        return get_data_frame(dataframes[crop],until)
     
-    return {}
+    return None
 
-def get_names():
+def extract_centre_names():
+    df = pd.read_csv(pathlib.Path('data/').iterdir()[0])
+    return df['Centre_Names'].unique()
+
+def extract_crop_names():
     crops = []
     for file in pathlib.Path('data/').iterdir():
         file = str(file)
@@ -45,3 +50,27 @@ def get_names():
         crop_name = crop_name.split('_upto')[0]
         crops.append(crop_name)
     return crops
+
+def filter_crop(crop:str,filters:Filter):
+    crops = extract_crop_names()
+    if filters['crop'] not in crops:
+        return {"message":"Error: crop not found","debug":crops}
+    df = get_crop_data()
+
+def get_data(until:datetime,filters:Filter):
+    if not filters:
+        return get_all_data(until)
+    df = get_all_data(until)
+
+    if 'crop' in filters:
+        df = get_crop_data(filters['crop'],until)
+    if 'from_date' in filters:
+        df = df[df['Date']>=filters['from_date']]
+    if 'to_date' in filters:
+        df = df[df['Date']<=filters['from_date']]
+    if 'centre' in filters:
+        df = df[df['Centre_Name']==filters['centre']]
+    
+    return df.to_dict()
+
+        

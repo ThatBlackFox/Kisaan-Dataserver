@@ -9,23 +9,18 @@ db = {}
 db['date'] = datetime.today()
 app = FastAPI()
 
-@app.get("/crop/{crop}")
-async def get_crop(crop):
-    frames = get_crop_data(crop,until=db['date'])
-    if crop in frames:
-        return {"message":"Historic data", "data":frames[crop]}
-    else:
-        frames = get_all_data(until=db['date'])
-        return {"message":"Crop not found, only the attached crops are available", "data":list(frames.keys())}
+@app.get("/centre_names")
+async def get_centre_names():
+    return {"message":"Attached centres are available","data":list(extract_centre_names())}
 
 @app.get("/crop_names")
 async def get_crop_names():
-    frames = get_all_data(until=db['date'])
+    frames = extract_crop_names()
     return {"message":"Attached crops are available", "data":list(frames.keys())}
 
-@app.get("/all_crops")
-async def get_all_crops():
-    frames = get_all_data(until=db['date'])
+@app.get("/crop_prices")
+async def get_all_crops(filters:Filter=None):
+    frames = get_all_data(until=db['date'],filters=filters)
     return {"message":"Historic data", "data":frames}
 
 @app.get('/')
