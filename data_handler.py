@@ -81,4 +81,5 @@ def get_data(until:datetime,filters:Filter=None):
     df = apply_filter(df,filters)
     with open('dump.json','w') as f:
         json.dump(json.loads(df.to_json()), f)
+    df.dropna(inplace=True)
     return df.to_dict()
