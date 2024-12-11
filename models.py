@@ -10,3 +10,4 @@ class Filter(BaseModel):
     centre: Optional[str] = None
     from_date: Optional[datetime] = None
     to_date: Optional[datetime] = None
+    backend: Optional[bool] = False

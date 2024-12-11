@@ -3,6 +3,9 @@ import os
 import pathlib
 from datetime import datetime
 from models import *
+import holidays
+from sklearn.preprocessing import LabelEncoder
+import numpy as np
 import json
 
 def get_data_frame(path:str, until:datetime=None):
@@ -62,6 +65,28 @@ def filter_crop(crop:str,filters:Filter):
     if filters.crop not in crops:
         return {"message":"Error: crop not found","debug":crops}
     df = get_crop_data()
+
+def preprocess(df:pd.DataFrame):
+    df['Date'] = pd.to_datetime(df['Date'])
+    df['Month'] = [i.month for i in df['Date']]
+    df['Day'] = np.array(i.weekday() for i in df['Date'])
+    df['Year'] = [i.year for i in df['Date']]
+    india_holidays = holidays.India(years=range(1997, 2016))
+    df['Holiday'] = [True if i in india_holidays else False for i in df['Date']]
+    df.drop('Date', axis=1, inplace=True)
+    le = LabelEncoder()
+    df['Centre_Name'] = le.fit_transform(df['Centre_Name'])
+    for col in df.columns:
+        if col!='Price' and col!='Commodity_Name':
+            df[col]=df[col].astype(int)
+
+    for i in range(1, 8):  # Create 7 new columns for the previous 7 days
+        df[f'Price_t-{i}'] = df['Price'].shift(i)  
+    df.dropna(inplace=True)
+    try:
+        df.drop('Commodity_Name',axis=1,inplace=True)
+    except:
+        pass
 
 def apply_filter(df:pd.DataFrame,filters:Filter):
     if filters.crop != None:

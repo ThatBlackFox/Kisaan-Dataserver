@@ -5,6 +5,7 @@ from data_handler import *
 from unqlite import UnQLite as unq
 from datetime import datetime
 
+
 db = {}
 db['date'] = datetime.today()
 app = FastAPI()
@@ -36,6 +37,3 @@ async def set_date(date: DateModel):
 @app.get('/get_date')
 async def get_date():
     return {"message":"Date is currently set to the same as the field of date", "date":db['date']}
-
-
-
