@@ -8,7 +8,7 @@ import json
 def get_data_frame(path:str, until:datetime=None):
     df = pd.read_csv(path)
     df['Date'] = pd.to_datetime(df['Date'],format=r"%d-%m-%y")
-    df = df.fillna(-1)
+    # df = df.fillna(-1)
     if until!=None:
         df = df[df['Date']<=until]
     return df
