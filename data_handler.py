@@ -111,4 +111,5 @@ def get_data(until:datetime,filters:Filter=None):
         json.dump(json.loads(df.to_json()), f)
     df.dropna(inplace=True)
     df['Date']+= pd.Timedelta(days=3650) 
+    df['Price']*=2
     return df.to_dict()
