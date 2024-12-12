@@ -2,7 +2,6 @@ from fastapi import FastAPI, status
 from fastapi.responses import RedirectResponse
 from models import *
 from data_handler import *
-from unqlite import UnQLite as unq
 from datetime import datetime
 
 
