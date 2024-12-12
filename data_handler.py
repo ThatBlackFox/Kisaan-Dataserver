@@ -92,8 +92,11 @@ def apply_filter(df:pd.DataFrame,filters:Filter):
     if filters.crop != None:
         df = df[df['Commodity_Name']==filters.crop]
     if filters.from_date != None:
+        filters.from_date.year-=10
         df = df[df['Date']>=filters.from_date]
+
     if filters.to_date != None:
+        filters.to_date.year-=10
         df = df[df['Date']<=filters.to_date]
     if filters.centre != None:
         df = df[df['Centre_Name']==filters.centre]
@@ -107,4 +110,5 @@ def get_data(until:datetime,filters:Filter=None):
     with open('dump.json','w') as f:
         json.dump(json.loads(df.to_json()), f)
     df.dropna(inplace=True)
+    df['Date']+= pd.Timedelta(days=3650) 
     return df.to_dict()
