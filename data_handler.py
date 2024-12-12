@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import pathlib
-from datetime import datetime
+from datetime import datetime, timedelta
 from models import *
 import holidays
 from sklearn.preprocessing import LabelEncoder
@@ -92,11 +92,11 @@ def apply_filter(df:pd.DataFrame,filters:Filter):
     if filters.crop != None:
         df = df[df['Commodity_Name']==filters.crop]
     if filters.from_date != None:
-        filters.from_date.year-=10
+        filters.from_date-=timedelta(360*10)
         df = df[df['Date']>=filters.from_date]
 
     if filters.to_date != None:
-        filters.to_date.year-=10
+        filters.to_date-=timedelta(360*10)
         df = df[df['Date']<=filters.to_date]
     if filters.centre != None:
         df = df[df['Centre_Name']==filters.centre]
